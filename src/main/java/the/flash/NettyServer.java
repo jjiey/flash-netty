@@ -58,12 +58,12 @@ public class NettyServer {
                     }
                 });
 
+        // 必须4.监听端口
         bind(serverBootstrap, BEGIN_PORT);
     }
 
     private static void bind(final ServerBootstrap serverBootstrap, final int port) {
-        // bind()方法是一个异步方法，调用之后立即返回ChannelFuture
-        // 给ChannelFuture添加监听器GenericFutureListener，重写operationComplete方法，监听端口是否绑定成功
+        // bind()方法是一个异步方法，调用之后立即返回ChannelFuture。给ChannelFuture添加监听器GenericFutureListener，重写operationComplete方法，监听端口是否绑定成功
         serverBootstrap.bind(port).addListener(future -> {
             if (future.isSuccess()) {
                 System.out.println("端口[" + port + "]绑定成功!");
