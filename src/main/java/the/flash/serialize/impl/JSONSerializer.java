@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSON;
 import the.flash.serialize.Serializer;
 import the.flash.serialize.SerializerAlogrithm;
 
+/**
+ * JSON序列化
+ */
 public class JSONSerializer implements Serializer {
 
     @Override
@@ -13,13 +16,11 @@ public class JSONSerializer implements Serializer {
 
     @Override
     public byte[] serialize(Object object) {
-
         return JSON.toJSONBytes(object);
     }
 
     @Override
     public <T> T deserialize(Class<T> clazz, byte[] bytes) {
-
         return JSON.parseObject(bytes, clazz);
     }
 }
