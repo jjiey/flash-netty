@@ -21,7 +21,6 @@ public class PacketCodeC {
     private final Map<Byte, Class<? extends Packet>> packetTypeMap;
     private final Map<Byte, Serializer> serializerMap;
 
-
     private PacketCodeC() {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
@@ -37,7 +36,6 @@ public class PacketCodeC {
     public void encode(ByteBuf byteBuf, Packet packet) {
         // 1. 序列化 java 对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
-
         // 2. 实际编码过程
         byteBuf.writeInt(MAGIC_NUMBER);
         byteBuf.writeByte(packet.getVersion());
@@ -51,16 +49,12 @@ public class PacketCodeC {
     public Packet decode(ByteBuf byteBuf) {
         // 跳过 magic number
         byteBuf.skipBytes(4);
-
         // 跳过版本号
         byteBuf.skipBytes(1);
-
         // 序列化算法
         byte serializeAlgorithm = byteBuf.readByte();
-
         // 指令
         byte command = byteBuf.readByte();
-
         // 数据包长度
         int length = byteBuf.readInt();
 
@@ -78,12 +72,10 @@ public class PacketCodeC {
     }
 
     private Serializer getSerializer(byte serializeAlgorithm) {
-
         return serializerMap.get(serializeAlgorithm);
     }
 
     private Class<? extends Packet> getRequestType(byte command) {
-
         return packetTypeMap.get(command);
     }
 }
