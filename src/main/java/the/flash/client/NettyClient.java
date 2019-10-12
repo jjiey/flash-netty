@@ -21,10 +21,10 @@ import java.util.concurrent.TimeUnit;
  * @author 闪电侠
  */
 public class NettyClient {
+
     private static final int MAX_RETRY = 5;
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 8000;
-
 
     public static void main(String[] args) {
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -39,6 +39,8 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) {
+                        // ch.pipeline()返回的是和这条连接相关的逻辑处理链，采用了责任链模式
+                        // addLast()添加一个逻辑处理器，这个逻辑处理器是为了在客户端建立连接成功后，向服务端写数据
                         ch.pipeline().addLast(new ClientHandler());
                     }
                 });
@@ -51,6 +53,7 @@ public class NettyClient {
             if (future.isSuccess()) {
                 System.out.println(new Date() + ": 连接成功，启动控制台线程……");
                 Channel channel = ((ChannelFuture) future).channel();
+                // 连接成功之后，启动控制台线程
                 startConsoleThread(channel);
             } else if (retry == 0) {
                 System.err.println("重试次数已用完，放弃连接！");
@@ -60,8 +63,7 @@ public class NettyClient {
                 // 本次重连的间隔
                 int delay = 1 << order;
                 System.err.println(new Date() + ": 连接失败，第" + order + "次重连……");
-                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit
-                        .SECONDS);
+                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit.SECONDS);
             }
         });
     }
@@ -69,6 +71,7 @@ public class NettyClient {
     private static void startConsoleThread(Channel channel) {
         new Thread(() -> {
             while (!Thread.interrupted()) {
+                // 判断当前channel是登录状态，才允许控制台输入消息
                 if (LoginUtil.hasLogin(channel)) {
                     System.out.println("输入消息发送至服务端: ");
                     Scanner sc = new Scanner(System.in);

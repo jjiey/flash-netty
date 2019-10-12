@@ -30,7 +30,6 @@ public class NettyServer {
                     }
                 });
 
-
         bind(serverBootstrap, PORT);
     }
 

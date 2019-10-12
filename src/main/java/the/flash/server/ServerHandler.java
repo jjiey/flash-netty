@@ -16,6 +16,7 @@ import java.util.Date;
  * @author chao.yu
  * chao.yu@dianping.com
  * @date 2018/08/04 06:21.
+ * @description 服务端登录逻辑处理器
  */
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
@@ -26,10 +27,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         Packet packet = PacketCodeC.INSTANCE.decode(requestByteBuf);
 
         if (packet instanceof LoginRequestPacket) {
+            // 处理登录
             System.out.println(new Date() + ": 收到客户端登录请求……");
             // 登录流程
             LoginRequestPacket loginRequestPacket = (LoginRequestPacket) packet;
-
             LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
             loginResponsePacket.setVersion(packet.getVersion());
             if (valid(loginRequestPacket)) {
@@ -44,9 +45,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             ByteBuf responseByteBuf = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
             ctx.channel().writeAndFlush(responseByteBuf);
         } else if (packet instanceof MessageRequestPacket) {
+            // 处理消息
             // 客户端发来消息
             MessageRequestPacket messageRequestPacket = ((MessageRequestPacket) packet);
-
             MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
             System.out.println(new Date() + ": 收到客户端消息: " + messageRequestPacket.getMessage());
             messageResponsePacket.setMessage("服务端回复【" + messageRequestPacket.getMessage() + "】");
