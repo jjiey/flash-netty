@@ -7,9 +7,9 @@ import the.flash.serialize.Serializer;
 import the.flash.serialize.impl.JSONSerializer;
 
 public class PacketCodeCTest {
+
     @Test
     public void encode() {
-
         Serializer serializer = new JSONSerializer();
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
@@ -23,6 +23,5 @@ public class PacketCodeCTest {
         Packet decodedPacket = packetCodeC.decode(byteBuf);
 
         Assert.assertArrayEquals(serializer.serialize(loginRequestPacket), serializer.serialize(decodedPacket));
-
     }
 }

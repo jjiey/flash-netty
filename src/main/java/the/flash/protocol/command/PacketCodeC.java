@@ -10,10 +10,22 @@ import java.util.Map;
 
 import static the.flash.protocol.command.Command.LOGIN_REQUEST;
 
+/**
+ * 把数据编码到通信协议的二进制数据包中
+ */
 public class PacketCodeC {
 
+    /**
+     * 魔数
+     */
     private static final int MAGIC_NUMBER = 0x12345678;
+    /**
+     * K-指令，V-通信对象
+     */
     private static final Map<Byte, Class<? extends Packet>> packetTypeMap;
+    /**
+     * K-序列化算法标识，V-序列化算法
+     */
     private static final Map<Byte, Serializer> serializerMap;
 
     static {
@@ -25,13 +37,15 @@ public class PacketCodeC {
         serializerMap.put(serializer.getSerializerAlogrithm(), serializer);
     }
 
-
+    /**
+     * 封装成二进制
+     */
     public ByteBuf encode(Packet packet) {
         // 1. 创建 ByteBuf 对象
+        // ioBuffer()方法会返回适配io读写相关的内存，它会尽可能创建一个直接内存，直接内存可以理解为不受jvm堆管理的内存空间，写到IO缓冲区的效果更高
         ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
         // 2. 序列化 java 对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
-
         // 3. 实际编码过程
         byteBuf.writeInt(MAGIC_NUMBER);
         byteBuf.writeByte(packet.getVersion());
@@ -43,23 +57,21 @@ public class PacketCodeC {
         return byteBuf;
     }
 
-
+    /**
+     * 解析二进制
+     */
     public Packet decode(ByteBuf byteBuf) {
-        // 跳过 magic number
+        // 跳过 magic number todo 校验魔数
         byteBuf.skipBytes(4);
-
-        // 跳过版本号
+        // 跳过版本号 暂不处理
         byteBuf.skipBytes(1);
-
-        // 序列化算法
+        // 序列化算法标识
         byte serializeAlgorithm = byteBuf.readByte();
-
         // 指令
         byte command = byteBuf.readByte();
-
         // 数据包长度
         int length = byteBuf.readInt();
-
+        // 根据拿到的数据包的长度取出数据
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
 
@@ -74,12 +86,10 @@ public class PacketCodeC {
     }
 
     private Serializer getSerializer(byte serializeAlgorithm) {
-
         return serializerMap.get(serializeAlgorithm);
     }
 
     private Class<? extends Packet> getRequestType(byte command) {
-
         return packetTypeMap.get(command);
     }
 }
