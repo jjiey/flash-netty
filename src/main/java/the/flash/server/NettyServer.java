@@ -24,10 +24,10 @@ public class NettyServer {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
+                        // 获取服务端侧关于这条连接的逻辑处理链pipeline，然后给服务端添加一个逻辑处理器，负责读取客户端发来的数据
                         ch.pipeline().addLast(new FirstServerHandler());
                     }
                 });
-
 
         bind(serverBootstrap, PORT);
     }

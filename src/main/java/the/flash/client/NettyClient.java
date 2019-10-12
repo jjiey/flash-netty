@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit;
  * @author 闪电侠
  */
 public class NettyClient {
+
     private static final int MAX_RETRY = 5;
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 8000;
-
 
     public static void main(String[] args) {
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -32,6 +32,8 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) {
+                        // ch.pipeline()返回的是和这条连接相关的逻辑处理链，采用了责任链模式
+                        // addLast()添加一个逻辑处理器，这个逻辑处理器是为了在客户端建立连接成功后，向服务端写数据
                         ch.pipeline().addLast(new FirstClientHandler());
                     }
                 });
@@ -51,8 +53,7 @@ public class NettyClient {
                 // 本次重连的间隔
                 int delay = 1 << order;
                 System.err.println(new Date() + ": 连接失败，第" + order + "次重连……");
-                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit
-                        .SECONDS);
+                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit.SECONDS);
             }
         });
     }
