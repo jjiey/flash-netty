@@ -35,6 +35,8 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) {
                         /*
                         pipeline执行顺序：InBoundHandler - OutBoundHandler
+                        pipeline和channelHandler，channelHandler又分为inBound和outBound
+                        inBoundHandler 的执行顺序与我们实际的添加顺序相同，而 outBoundHandler 则相反
                         InBoundHandlerA - InBoundHandlerB - InBoundHandlerC - OutBoundHandlerC - OutBoundHandlerB - OutBoundHandlerA
                         */
                         // inBound，处理读数据的逻辑链
