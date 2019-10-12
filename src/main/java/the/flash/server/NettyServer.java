@@ -30,6 +30,7 @@ public class NettyServer {
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                    @Override
                     protected void initChannel(NioSocketChannel ch) {
 //                        ch.pipeline().addLast(new FirstServerHandler());
                         ch.pipeline().addLast(new Spliter());
@@ -39,7 +40,6 @@ public class NettyServer {
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
-
 
         bind(serverBootstrap, PORT);
     }
