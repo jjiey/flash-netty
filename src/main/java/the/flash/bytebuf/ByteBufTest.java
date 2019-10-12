@@ -4,9 +4,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
 public class ByteBufTest {
-    public static void main(String[] args) {
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(9, 100);
 
+    public static void main(String[] args) {
+        // 初始容量，最大容量
+        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(9, 100);
         print("allocate ByteBuf(9, 100)", buffer);
 
         // write 方法改变写指针，写完之后写指针未到 capacity 的时候，buffer 仍然可写
@@ -31,7 +32,6 @@ public class ByteBufTest {
         System.out.println("getInt(3) return: " + buffer.getInt(3));
         print("getByte()", buffer);
 
-
         // set 方法不改变读写指针
         buffer.setByte(buffer.readableBytes() + 1, 0);
         print("setByte()", buffer);
@@ -40,20 +40,19 @@ public class ByteBufTest {
         byte[] dst = new byte[buffer.readableBytes()];
         buffer.readBytes(dst);
         print("readBytes(" + dst.length + ")", buffer);
-
     }
 
     private static void print(String action, ByteBuf buffer) {
         System.out.println("after ===========" + action + "============");
-        System.out.println("capacity(): " + buffer.capacity());
-        System.out.println("maxCapacity(): " + buffer.maxCapacity());
-        System.out.println("readerIndex(): " + buffer.readerIndex());
-        System.out.println("readableBytes(): " + buffer.readableBytes());
-        System.out.println("isReadable(): " + buffer.isReadable());
-        System.out.println("writerIndex(): " + buffer.writerIndex());
-        System.out.println("writableBytes(): " + buffer.writableBytes());
-        System.out.println("isWritable(): " + buffer.isWritable());
-        System.out.println("maxWritableBytes(): " + buffer.maxWritableBytes());
+        System.out.println("当前占用字节内存大小capacity(): " + buffer.capacity());
+        System.out.println("最大占用字节内存大小maxCapacity(): " + buffer.maxCapacity());
+        System.out.println("读指针readerIndex(): " + buffer.readerIndex());
+        System.out.println("当前可读字节数readableBytes(): " + buffer.readableBytes());
+        System.out.println("是否可读isReadable(): " + buffer.isReadable());
+        System.out.println("写指针writerIndex(): " + buffer.writerIndex());
+        System.out.println("当前可写字节数writableBytes(): " + buffer.writableBytes());
+        System.out.println("是否可写isWritable(): " + buffer.isWritable());
+        System.out.println("可写的最大字节数maxWritableBytes(): " + buffer.maxWritableBytes());
         System.out.println();
     }
 }
