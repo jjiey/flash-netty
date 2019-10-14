@@ -42,6 +42,9 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         return UUID.randomUUID().toString().split("-")[0];
     }
 
+    /**
+     * 用户下线之后，需要在内存里面自动删除userId到channel的映射关系
+     */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         SessionUtil.unBindSession(ctx.channel());
