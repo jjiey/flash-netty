@@ -7,10 +7,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * 指令管理类，对指令操作进行管理
+ * todo
+ */
 public class ConsoleCommandManager implements ConsoleCommand {
+
     private Map<String, ConsoleCommand> consoleCommandMap;
 
     public ConsoleCommandManager() {
+        // 把所有要管理的控制台指令都塞到consoleCommandMap中
         consoleCommandMap = new HashMap<>();
         consoleCommandMap.put("sendToUser", new SendToUserConsoleCommand());
         consoleCommandMap.put("logout", new LogoutConsoleCommand());
@@ -19,7 +25,7 @@ public class ConsoleCommandManager implements ConsoleCommand {
 
     @Override
     public void exec(Scanner scanner, Channel channel) {
-        //  获取第一个指令
+        // 获取第一个指令
         String command = scanner.next();
 
         if (!SessionUtil.hasLogin(channel)) {
