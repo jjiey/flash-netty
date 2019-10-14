@@ -66,8 +66,7 @@ public class NettyClient {
                 // 本次重连的间隔
                 int delay = 1 << order;
                 System.err.println(new Date() + ": 连接失败，第" + order + "次重连……");
-                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit
-                        .SECONDS);
+                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit.SECONDS);
             }
         });
     }
@@ -75,6 +74,7 @@ public class NettyClient {
     private static void startConsoleThread(Channel channel) {
         new Thread(() -> {
             while (!Thread.interrupted()) {
+                // 这里判断登录的逻辑在服务端AuthHandler里做了
 //                if (LoginUtil.hasLogin(channel)) {
                     System.out.println("输入消息发送至服务端: ");
                     Scanner sc = new Scanner(System.in);

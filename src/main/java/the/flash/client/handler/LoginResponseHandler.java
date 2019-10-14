@@ -33,6 +33,9 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
         }
     }
 
+    /**
+     * 用于验证客户端连接是否会被关闭
+     */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         System.out.println("客户端连接被关闭!");
