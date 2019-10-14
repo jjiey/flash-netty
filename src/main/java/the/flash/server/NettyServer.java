@@ -30,7 +30,16 @@ public class NettyServer {
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.TCP_NODELAY, true)
+                /*
+                ChannelInitializer就利用了Netty的handler生命周期中handlerAdded()与channelRegistered()两个特性
+                handlerAdded()：当检测到新连接之后，调用ch.pipeline().addLast(new LifeCyCleTestHandler())之后的回调，表示在当前的channel中，已经成功添加了一个handler处理器
+                channelRegistered()：当前的channel的所有的逻辑处理已经和某个NIO线程建立了绑定关系
+                 */
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
+                    /**
+                     * ChannelInitializer定义了一个抽象的方法initChannel()，这个抽象方法由我们自行实现，我们在服务端启动的流程里面的实现逻辑就是往pipeline里面塞我们的handler链
+                     */
+                    @Override
                     protected void initChannel(NioSocketChannel ch) {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new LifeCyCleTestHandler());

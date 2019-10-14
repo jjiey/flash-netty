@@ -13,6 +13,7 @@ public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * 当检测到新连接之后，调用ch.pipeline().addLast(new LifeCyCleTestHandler())之后的回调，表示在当前的channel中，已经成功添加了一个handler处理器
+     * 通常可以用在一些资源的申请和释放
      */
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
@@ -31,6 +32,8 @@ public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * 当channel的所有的业务逻辑链准备完毕以及绑定好一个NIO线程之后，这条连接算是真正激活了，接下来就会回调到此方法
+     * 对我们的应用程序来说，这个方法表明的含义是TCP连接的建立，通常我们在这个回调里面统计单机的连接数，channelActive()被调用，连接数加一
+     * 另外，也可以在channelActive()方法中，实现对客户端连接ip黑白名单的过滤
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -40,6 +43,7 @@ public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * 客户端向服务端发来数据，每次都会回调此方法，表示有数据可读
+     * 拆包粘包原理，服务端根据自定义协议来进行拆包，就是在channelRead方法里面，每次读到一定的数据，都会累加到一个容器里面，然后判断是否能够拆出来一个完整的数据包，如果够的话就拆了之后，往下进行传递
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -54,11 +58,11 @@ public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         System.out.println("channel 某次数据读完：channelReadComplete()");
         super.channelReadComplete(ctx);
-
     }
 
     /**
      * 表示这条连接已经被关闭了，这条连接在TCP层面已经不再是ESTABLISH状态了
+     * 对我们的应用程序来说，这个方法表明的含义是TCP连接的释放，通常我们在这个回调里面统计单机的连接数，channelInActive()被调用，连接数减一
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
@@ -77,6 +81,7 @@ public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * 移除掉所有给这条连接上添加的业务逻辑处理器
+     * 通常可以用在一些资源的申请和释放
      */
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {

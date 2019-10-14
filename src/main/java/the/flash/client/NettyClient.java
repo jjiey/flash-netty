@@ -24,10 +24,10 @@ import java.util.concurrent.TimeUnit;
  * @author 闪电侠
  */
 public class NettyClient {
+
     private static final int MAX_RETRY = 5;
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 8000;
-
 
     public static void main(String[] args) {
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
