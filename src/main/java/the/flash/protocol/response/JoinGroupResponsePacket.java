@@ -5,8 +5,12 @@ import the.flash.protocol.Packet;
 
 import static the.flash.protocol.command.Command.JOIN_GROUP_RESPONSE;
 
+/**
+ * 加入群聊响应对象
+ */
 @Data
 public class JoinGroupResponsePacket extends Packet {
+
     private String groupId;
 
     private boolean success;

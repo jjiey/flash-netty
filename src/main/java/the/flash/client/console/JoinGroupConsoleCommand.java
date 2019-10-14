@@ -5,7 +5,11 @@ import the.flash.protocol.request.JoinGroupRequestPacket;
 
 import java.util.Scanner;
 
+/**
+ * 加入群聊指令操作
+ */
 public class JoinGroupConsoleCommand implements ConsoleCommand {
+
     @Override
     public void exec(Scanner scanner, Channel channel) {
         JoinGroupRequestPacket joinGroupRequestPacket = new JoinGroupRequestPacket();

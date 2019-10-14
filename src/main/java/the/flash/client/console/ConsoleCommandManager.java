@@ -7,10 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * 指令管理类，对指令操作进行管理
+ */
 public class ConsoleCommandManager implements ConsoleCommand {
+
     private Map<String, ConsoleCommand> consoleCommandMap;
 
     public ConsoleCommandManager() {
+        // 把所有要管理的控制台指令都塞到consoleCommandMap中
         consoleCommandMap = new HashMap<>();
         consoleCommandMap.put("sendToUser", new SendToUserConsoleCommand());
         consoleCommandMap.put("logout", new LogoutConsoleCommand());
