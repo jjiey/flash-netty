@@ -4,7 +4,11 @@ import the.flash.protocol.Packet;
 
 import static the.flash.protocol.command.Command.HEARTBEAT_REQUEST;
 
+/**
+ * 心跳包
+ */
 public class HeartBeatRequestPacket extends Packet {
+
     @Override
     public Byte getCommand() {
         return HEARTBEAT_REQUEST;

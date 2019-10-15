@@ -6,8 +6,12 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import the.flash.protocol.request.HeartBeatRequestPacket;
 import the.flash.protocol.response.HeartBeatResponsePacket;
 
+/**
+ * 心跳响应
+ */
 @ChannelHandler.Sharable
 public class HeartBeatRequestHandler extends SimpleChannelInboundHandler<HeartBeatRequestPacket> {
+
     public static final HeartBeatRequestHandler INSTANCE = new HeartBeatRequestHandler();
 
     private HeartBeatRequestHandler() {
