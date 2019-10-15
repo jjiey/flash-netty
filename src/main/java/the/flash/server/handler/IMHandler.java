@@ -10,6 +10,9 @@ import java.util.Map;
 
 import static the.flash.protocol.command.Command.*;
 
+/**
+ * 压缩平行的指令处理handler
+ */
 @ChannelHandler.Sharable
 public class IMHandler extends SimpleChannelInboundHandler<Packet> {
     public static final IMHandler INSTANCE = new IMHandler();

@@ -6,6 +6,9 @@ import the.flash.session.Session;
 
 import static the.flash.protocol.command.Command.GROUP_MESSAGE_RESPONSE;
 
+/**
+ * 群聊响应对象
+ */
 @Data
 public class GroupMessageResponsePacket extends Packet {
 
@@ -17,7 +20,6 @@ public class GroupMessageResponsePacket extends Packet {
 
     @Override
     public Byte getCommand() {
-
         return GROUP_MESSAGE_RESPONSE;
     }
 }

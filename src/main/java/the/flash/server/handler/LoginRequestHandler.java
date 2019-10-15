@@ -11,9 +11,11 @@ import the.flash.util.SessionUtil;
 
 import java.util.Date;
 
+// 1.加上注解标识，表明该handler是可以多个channel共享的
 @ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
 
+    // 2. 构造单例
     public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
 
     protected LoginRequestHandler() {
