@@ -10,6 +10,9 @@ public class HeartBeatTimerHandler extends ChannelInboundHandlerAdapter {
 
     private static final int HEARTBEAT_INTERVAL = 5;
 
+    /**
+     * 客户端连接建立成功之后被调用
+     */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         scheduleSendHeartBeat(ctx);

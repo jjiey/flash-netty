@@ -37,8 +37,11 @@ public class NettyClient {
         bootstrap
                 .group(workerGroup)
                 .channel(NioSocketChannel.class)
+                // 连接的超时时间
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                // 开启 TCP 底层心跳机制，true 表示开启
                 .option(ChannelOption.SO_KEEPALIVE, true)
+                // 开启 Nagle 算法，true 表示关闭
                 .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
@@ -88,8 +91,9 @@ public class NettyClient {
                 // 本次重连的间隔
                 int delay = 1 << order;
                 System.err.println(new Date() + ": 连接失败，第" + order + "次重连……");
-                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit
-                        .SECONDS);
+                // bootstrap.config().group() 返回 workerGroup
+                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1),
+                        delay, TimeUnit.SECONDS);
             }
         });
     }

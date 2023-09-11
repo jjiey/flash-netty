@@ -28,8 +28,11 @@ public class NettyServer {
         serverBootstrap
                 .group(boosGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
+                // 系统用于临时存放已完成三次握手的请求的队列的最大长度，如果连接建立频繁，服务器处理创建新连接较慢，可以适当调大这个参数
                 .option(ChannelOption.SO_BACKLOG, 1024)
+                // 开启 TCP 底层心跳机制，true 表示开启
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
+                // 开启 Nagle 算法，true 表示关闭
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
